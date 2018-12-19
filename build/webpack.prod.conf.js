@@ -63,6 +63,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: config.build.index,
       template: 'index.html',
+      // 加入头部图片
+      favicon: path.resolve('./favicon.ico'),
       inject: true,
       minify: {
         removeComments: true,

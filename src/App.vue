@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    我是app.vue
     <router-view/>
   </div>
 </template>
@@ -10,6 +11,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus">
 
 </style>
