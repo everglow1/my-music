@@ -4,7 +4,7 @@
       <slot></slot>
     </div>
     <div class="dots">
-
+      <span class="dot" :class="{'active': currentIndex == index}" v-for="(item, index) in dots" :key="index"></span>
     </div>
   </div>
 </template>
@@ -17,8 +17,8 @@ export default {
   name: 'slider',
   data() {
     return {
-      // children:[],   // 所有图
-      // slider: {}     // 初始化better-scroll对象
+      dots: [],   // 定义dots
+      currentIndex: 0
     }
   },
   props: {
@@ -40,28 +40,44 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this._initSlider()
-      this._setSliderWidth()
+      this._setSliderWidth()  // 计算图片列表宽度
+      this._initDots()        // 初始化dots
+      this._initSlider()      // 初始化
+      if(this.autoPlay) {     // 自动播放
+        this._play()
+      }
     }, 20);
+
+    window.addEventListener('resize', () => {
+      console.log('11111')
+      if(!this.slider) {
+        return
+      } else {
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      }
+    })
   },
   methods: {
     // 计算区域宽度
-    _setSliderWidth() {
-      this.children = this.$refs.sliderGroup.children
-
-        let width = 0
-        let sliderWidth = this.$refs.slider.clientWidth  // 一个图的宽度
-        for (let i = 0; i < this.children.length; i++) {
-          let child = this.children[i]
-          addClass(child, 'slider-item')
-
-          child.style.width = sliderWidth + 'px'
-          width = width + sliderWidth
-        }
-        if (this.loop) {
-          // width = width + sliderWidth + sliderWidth
-        }
-        this.$refs.sliderGroup.style.width = width + 'px'
+    _setSliderWidth(isResize) {
+      this.children = this.$refs.sliderGroup.children   // this.children  直接挂在this上
+      let width = 0
+      let sliderWidth = this.$refs.slider.clientWidth  // 一个图的宽度
+      for (let i = 0; i < this.children.length; i++) {
+        let child = this.children[i]
+        addClass(child, 'slider-item')
+        child.style.width = sliderWidth + 'px'
+        width = width + sliderWidth
+      }
+      if (this.loop && !isResize) {
+        width = width + sliderWidth + sliderWidth
+      }
+      this.$refs.sliderGroup.style.width = width + 'px'   // 整个图列表的宽度
+    },
+    // 初始化dots数组
+    _initDots() {
+      this.dots = new Array(this.children.length)
     },
     // 初始化滚动
     _initSlider() {
@@ -75,6 +91,23 @@ export default {
             speed: 400
           }
       })
+      // 绑定滚动完毕事件,赋值给currentIndex
+      this.slider.on('scrollEnd', () => {
+        let PageIndex = this.slider.getCurrentPage().pageX
+        this.currentIndex = PageIndex
+        if(this.autoPlay) {       // 滚动完毕后再次调用滚动
+          this._play()
+        }
+        console.log('currentIndex', PageIndex)
+      })
+    },
+    // 自动播放
+    _play() {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.slider.next()    // next方法
+        console.log('sss')
+      }, this.interval)
     }
   }
 }
@@ -118,7 +151,6 @@ export default {
         border-radius: 50%
         background: $color-text-l
         &.active
-          width: 20px
           border-radius: 5px
-          background: $color-text-ll
+          background: $color-theme
 </style>
