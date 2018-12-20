@@ -23,4 +23,21 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import "../../common/stylus/variable.styl"
+@import "../../common/stylus/mixin.styl"
+
+  .tab
+    display flex
+    height 44px
+    line-height 44px
+    .tab-item
+      flex 1
+      text-align center
+      font-size $font-size-medium
+      .tab-link
+        padding-bottom: 5px
+        color: $color-text-l
+      &.router-link-active
+        .tab-link
+          border-bottom 2px solid $color-theme
 </style>
