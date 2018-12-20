@@ -24,7 +24,6 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../../common/stylus/variable.styl"
-@import "../../common/stylus/mixin.styl"
 
   .tab
     display flex
