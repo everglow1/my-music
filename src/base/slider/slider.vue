@@ -47,15 +47,16 @@ export default {
         this._play()
       }
     }, 20);
-
     window.addEventListener('resize', () => {
       console.log('11111')
-      if(!this.slider) {
-        return
-      } else {
-        this._setSliderWidth(true)
-        this.slider.refresh()
-      }
+      setTimeout(() => {
+        if(!this.slider) {
+          return
+        } else {
+          this._setSliderWidth(true)
+          this.slider.refresh()
+        }
+      }, 1000);
     })
   },
   methods: {
@@ -91,7 +92,7 @@ export default {
             speed: 400
           }
       })
-      // 绑定滚动完毕事件,赋值给currentIndex
+      // 绑定滚动结束事件,赋值给currentIndex
       this.slider.on('scrollEnd', () => {
         let PageIndex = this.slider.getCurrentPage().pageX
         this.currentIndex = PageIndex
