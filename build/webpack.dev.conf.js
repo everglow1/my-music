@@ -10,6 +10,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
+const axios = require('axios')
+const bodyParser = require('body-parser')
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -22,6 +25,25 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    before(app) {
+      app.use(bodyParser.urlencoded({extended: true}))
+
+      // 获取歌单列表的数据
+      app.get('/api/getDiscList', (req, res) => {
+        let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query   //  请求的参数，将浏览器请求的参数传递到url后面
+        }).then((response) => {
+          res.json(response.data)  // 将请求的url的数据传到 api/getDiscList 接口里面
+        }).catch((err) => {
+          console.log(err)
+        })
+      })
+    },
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [

@@ -48,7 +48,6 @@ export default {
       }
     }, 20);
     window.addEventListener('resize', () => {
-      console.log('11111')
       setTimeout(() => {
         if(!this.slider) {
           return
@@ -99,7 +98,6 @@ export default {
         if(this.autoPlay) {       // 滚动完毕后再次调用滚动
           this._play()
         }
-        console.log('currentIndex', PageIndex)
       })
     },
     // 自动播放
@@ -107,9 +105,12 @@ export default {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.slider.next()    // next方法
-        console.log('sss')
       }, this.interval)
     }
+  },
+  // 在切换离开此页面的时候清除定时器,即组件销毁的时候
+  destroyed() {
+    clearTimeout(this.timer)
   }
 }
 </script>
