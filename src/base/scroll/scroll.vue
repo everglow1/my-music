@@ -11,7 +11,6 @@ export default {
   name: 'scroll',
   data() {
     return {
-      scroll: {}
     }
   },
   props: {
@@ -62,10 +61,7 @@ export default {
   },
   watch: {
     data() {
-      console.log('数据改变了')
-      setTimeout(() => {
-        this.refresh()
-      }, 200);
+      this.refresh()
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content">
+    <scroll ref="scroll" class="recommend-content" :data="songLists">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
           <div class="slider-content">
@@ -18,13 +18,13 @@
           <ul>
             <li v-for="(item, index) in songLists" :key="index" class="item">
               <div class="icon">
-                <img width="60" height="60" :src="item.imgurl" />
+                <img class="needsclick" @load="loadImage" width="60" height="60" v-lazy="item.imgurl" />
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
                 <p class="desc" v-html="item.dissname"></p>
               </div>
-            </li>
+            </li> 
           </ul>
         </div>
       </div>
@@ -33,6 +33,10 @@
 </template>
 
 <script>
+/**
+ * better-scroll 计算dom容器的高度，判断需要滚动多长的距离，所以要确保dom都渲染完之后，初始化，或者调用refresh。
+ * 数据改变能影响dom，要调用refresh
+ */
 import BScroll from 'better-scroll'
 
 import {getRecommend, getSongList} from 'api/recommend.js'
@@ -73,6 +77,14 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+    // 监听图片的onload事件
+    loadImage() {
+      // 设置标志位。确保该逻辑只执行一次
+      if(!this.checLoaded) {
+        this.$refs.scroll.refresh()
+        this.checLoaded = true
+      }
     }
   }
 }
