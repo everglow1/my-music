@@ -68,7 +68,6 @@ export default {
           name: item.Fsinger_name
         }))
       })
-
       // 处理map数据，变为有序列表
       let hot = []
       let ret = []
@@ -82,11 +81,8 @@ export default {
       }
       // 排序字母数据, a~z
       ret.sort((a, b) => {
-        return a.title.charCodeAt[0] - b.title.charCodeAt[0]
+        return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })
-      console.log('map', map)
-      hot.concat(ret)
-      console.log('hot', hot.concat(ret))
       return hot.concat(ret)
     }
   }
