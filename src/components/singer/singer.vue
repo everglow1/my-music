@@ -1,6 +1,6 @@
 <template>
   <div class="singer">
-    
+    <listview :data="singers"></listview>
   </div>
 </template>
 
@@ -8,6 +8,8 @@
 import { getSingerList } from 'api/singer.js'
 import {ERR_OK} from 'api/config.js'
 import Singer from 'common/js/singer.js'
+import Listview from 'base/listview/listview.vue'
+
 
 const HOT_NAME = '热门'
 const HOT_LIST_LENGTH = 10
@@ -18,6 +20,9 @@ export default {
       singers: []
     }
   },
+  components: {
+    Listview
+  },
   created() {
     this._getSingerList()
   },
@@ -26,8 +31,9 @@ export default {
     _getSingerList() {
       getSingerList().then((res) => {
         if(res.code === ERR_OK) {
-          this.singers = res.data && res.data.list || []
-          console.log(this._normalizeSinger(this.singers))
+          this.singers = this._normalizeSinger(res.data && res.data.list || [])
+          // 传入所有歌手数据
+          // this._normalizeSinger(this.singers)
         }
       })
     },
@@ -68,7 +74,7 @@ export default {
       let ret = []
       for(let key in map) {
         let val = map[key]
-        if(val.title.match(/a-zA-Z/)) {
+        if(val.title.match(/[a-zA-Z]/)) {
           ret.push(val)
         } else if(val.title === HOT_NAME) {
           hot.push(val)
@@ -79,6 +85,8 @@ export default {
         return a.title.charCodeAt[0] - b.title.charCodeAt[0]
       })
       console.log('map', map)
+      hot.concat(ret)
+      console.log('hot', hot.concat(ret))
       return hot.concat(ret)
     }
   }
