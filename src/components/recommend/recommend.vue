@@ -28,6 +28,9 @@
           </ul>
         </div>
       </div>
+      <div class="loading" v-show="!songLists.length">
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
@@ -44,6 +47,7 @@ import {ERR_OK} from 'api/config.js'
 
 import Slider from 'base/slider/slider.vue'
 import Scroll from 'base/scroll/scroll.vue'
+import Loading from '../../base/loading/load.vue'
 
 export default {
   name: 'recommend',
@@ -55,7 +59,8 @@ export default {
   },
   components: {
     Slider,
-    Scroll
+    Scroll,
+    Loading
   },
   created() {
     this. _getRecommend()
@@ -142,4 +147,9 @@ export default {
               color: $color-text
             .desc
               color: $color-text-d
+      .loading
+        position absolute
+        width 100%
+        top 50%
+        transform translateY(-50%)  
 </style>
