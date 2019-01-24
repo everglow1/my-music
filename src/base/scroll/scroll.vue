@@ -15,9 +15,9 @@ export default {
   },
   props: {
     // 滚动类型
-    probType: {
+    probeType: {
       type: Number,
-      default: 1
+      default: 3
     },
     // 是否点击
     click: {
@@ -29,21 +29,31 @@ export default {
       type: Array,
       default: null
     },
+    // 是否监听滚动事件
+    listenScroll: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted() {
     setTimeout(() => {
       this._initScroll()
-    }, 100)
+    }, 500)
   },
   methods: {
     // 初始化scroll
     _initScroll() {
       if(!this.$refs.wrapper) {
         return
-      } else {
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          probType: this.probType,
-          click: this.click
+      }
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        probeType: this.probeType,
+        click: this.click
+      })
+      // 监听滚动事件  pos(位置)
+      if(this.listenScroll) {
+        this.scroll.on('scroll', pos => {
+          this.$emit('scroll', pos)
         })
       }
     },
@@ -68,6 +78,7 @@ export default {
   },
   watch: {
     data() {
+      console.log(111)
       this.refresh()
     }
   }

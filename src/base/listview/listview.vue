@@ -1,5 +1,10 @@
 <template>
-  <scroll class="listview" :data="data" ref="listView">
+  <scroll class="listview" 
+    :data="data" 
+    ref="listView" 
+    :listenScroll="listenScroll" 
+    :probeType="probeType"
+    @scroll="scroll">
     <!-- 左侧歌手 -->
     <ul>
       <li class="list-group" v-for="(group, index) in data" :key="index" ref="listgroup">
@@ -15,7 +20,11 @@
     <!-- 右侧字母菜单 .stop.prevent:阻止冒泡和浏览器的原生滚动-->
     <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
       <ul>
-        <li class="item" v-for="(item, i) in shortcutList" :key="i" :data-index="i">{{item}}</li>
+        <li class="item" v-for="(item, i) in shortcutList" 
+          :key="i" 
+          :data-index="i"
+          :class="{'current': currentIndex === i}"
+        >{{item}}</li>
       </ul>
     </div>
   </scroll>
@@ -36,14 +45,25 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      // 观察的y值和索引
+      scrollY: -1,
+      currentIndex: 0
+    }
+  },
   components: {
     Scroll
   },
   created() {
     // 存放touch值
-    this.touch = {
-
-    }
+    this.touch = {}
+    // 是否监听滚动事件
+    this.listenScroll = true
+    // 列表高度
+    this.listHeight = [],
+    // 实时监听
+    this.probeType = 3
   },
   computed: {
     shortcutList() {
@@ -69,13 +89,54 @@ export default {
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0    // y轴的移动量  | 0(向下取整)
-      console.log('delta', delta)
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta                   // 移动的索引值
-      console.log('anchorIndex', anchorIndex)
       this._scrollTo(anchorIndex)
+    },
+    // 滚动时
+    scroll(pos) {
+      this.scrollY = pos.y
     },
     _scrollTo(index) {
       this.$refs.listView.scrollToElement(this.$refs.listgroup[index], 0)   // 滚动到对应索引值的分组
+    },
+    // 计算列表高度区间
+    _calculateHeight() {
+      this.listHeight = []
+      let list = this.$refs.listgroup
+      let height = 0
+      this.listHeight.push(height)
+      for(let i = 0; i < list.length; i++) {
+        let item = list[i]
+        height = height + item.clientHeight
+        this.listHeight.push(height)
+      }
+    }
+  },
+  watch: {
+    // 当data变化时并且dom渲染后，计算高度
+    data() {
+      setTimeout(() => {
+        this._calculateHeight()
+      }, 500)
+    },
+    // 监听scollY
+    scrollY(newY) {
+      // 当滚动到顶部
+      if(newY >= 0) {
+        this.currentIndex = 0
+        return
+      }
+      let listHeight = this.listHeight
+      for(let i = 0; i < listHeight.length; i++) {
+        let height1 = listHeight[i]
+        let height2 = listHeight[i+1]
+        if(!height2 || (-newY > height1 && -newY < height2)) {
+          this.currentIndex = i
+          console.log('内部索引', this.currentIndex)
+          return
+        }
+      }
+      this.currentIndex = 0
     }
   }
 }
@@ -128,4 +189,6 @@ export default {
       line-height: 1
       color: $color-text-l
       font-size: $font-size-small
+      &.current
+        color $color-theme
 </style>
