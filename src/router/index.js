@@ -23,7 +23,7 @@ export default new Router({
       component: singer,
       children: [
         {
-          path: ':id',
+          path: ':id',  // 以id为变量，传入不同的id，跳到不同的子路由
           component: singerdetail
         }
       ]

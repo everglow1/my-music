@@ -21,4 +21,8 @@ npm run build --report
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 #### 开发过程
+
+#### 目录说明
+1. base：基础组件
+2. components：业务组件
  

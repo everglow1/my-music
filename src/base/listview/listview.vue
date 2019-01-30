@@ -10,7 +10,7 @@
       <li class="list-group" v-for="(group, index) in data" :key="index" ref="listgroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li class="list-group-item" v-for="(item, i) in group.items" :key="i">
+          <li @click="selectItem(item)" class="list-group-item" v-for="(item, i) in group.items" :key="i">
             <img class="avatar" v-lazy="item.avatar" />
             <span class="name">{{item.name}}</span>
           </li>
@@ -93,6 +93,10 @@ export default {
     }
   },
   methods: {
+    // 传递所点击的歌手
+    selectItem(item) {
+      this.$emit('select', item)
+    },
     // 触摸开始, 点击
     onShortcutTouchStart(e) {
       let anchorIndex = getData(e.target, 'index')   // 获取索引值
