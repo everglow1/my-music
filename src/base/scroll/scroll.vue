@@ -78,7 +78,6 @@ export default {
   },
   watch: {
     data() {
-      console.log(111)
       this.refresh()
     }
   }

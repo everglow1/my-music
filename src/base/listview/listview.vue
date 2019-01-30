@@ -97,6 +97,18 @@ export default {
       this.scrollY = pos.y
     },
     _scrollTo(index) {
+      // 点击空白区域时
+      if(!index && index !==0) {
+        return
+      }
+      // 滚动到最顶部
+      if(index < 0) {
+        index = 0
+      } else if(index > this.listHeight.length - 2) {  // 滚动到最底部
+        index = this.listHeight.length - 2
+      }
+      console.log('index', index)
+      this.scrollY = -this.listHeight[index]
       this.$refs.listView.scrollToElement(this.$refs.listgroup[index], 0)   // 滚动到对应索引值的分组
     },
     // 计算列表高度区间
@@ -121,22 +133,23 @@ export default {
     },
     // 监听scollY
     scrollY(newY) {
-      // 当滚动到顶部
+      // 当滚动到顶部  newY>0
       if(newY >= 0) {
         this.currentIndex = 0
         return
       }
+      // 当滚动到中间
       let listHeight = this.listHeight
-      for(let i = 0; i < listHeight.length; i++) {
+      for(let i = 0; i < listHeight.length - 1; i++) {
         let height1 = listHeight[i]
         let height2 = listHeight[i+1]
-        if(!height2 || (-newY > height1 && -newY < height2)) {
+        if(-newY >= height1 && -newY < height2) {
           this.currentIndex = i
-          console.log('内部索引', this.currentIndex)
           return
         }
       }
-      this.currentIndex = 0
+      // 当滚动到底部，-newY大于最后一个元素的上限。
+      this.currentIndex = listHeight.length - 2
     }
   }
 }
