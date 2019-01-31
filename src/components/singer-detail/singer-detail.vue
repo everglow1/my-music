@@ -8,15 +8,33 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import { getSingerDetail } from 'api/singer.js'
+import { ERR_OK } from 'api/config.js'
+
 export default {
   name: 'singer-detail',
+  created() {
+    this._getDetail()
+  },
   computed: {
     ...mapGetters([
       'singer'
     ])
   },
-  created() {
-    console.log('singer', this.singer)
+  methods: {
+    _getDetail() {
+      // 在详情页刷新时，返回歌手列表页。
+      if(!this.singer.id) {
+        this.$router.push('/singer')
+        return
+      }
+      // 根据歌手id获取歌手详情数据
+      getSingerDetail(this.singer.id).then((res) => {
+        if(res.code === ERR_OK) {
+          console.log('detail', res.data.list)
+        }
+      })
+    }
   }
 }
 </script>
