@@ -18,7 +18,7 @@
       </li>
     </ul>
     <!-- 右侧字母菜单 .stop.prevent:阻止冒泡和浏览器的原生滚动-->
-    <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
+    <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop="onShortcutTouchMove">
       <ul>
         <li class="item" v-for="(item, i) in shortcutList" 
           :key="i" 
