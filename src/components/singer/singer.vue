@@ -10,7 +10,7 @@ import { getSingerList } from 'api/singer.js'
 import {ERR_OK} from 'api/config.js'
 import Singer from 'common/js/singer.js'
 import Listview from 'base/listview/listview.vue'
-
+import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
 const HOT_LIST_LENGTH = 10
@@ -28,11 +28,17 @@ export default {
     this._getSingerList()
   },
   methods: {
+    // vuex仓库
+    ...mapMutations({
+      setSinger: 'SET_SINGERR'  // 映射的为mutation-types中的字符串
+    }),
+    // 跳歌手详情
     selectSinger(singer) {
-      // console.log('singer',singer)
       this.$router.push({
         path: `/singer/${singer.id}`
       })
+      // 调用映射的mapMutations，传入歌手信息
+      this.setSinger(singer)
     },
     // 获取歌手数据
     _getSingerList() {

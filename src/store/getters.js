@@ -3,9 +3,6 @@
  * 一般而已，常用getter取state的数据
  **/ 
 
-const getters = {
-
-}
 export const singer = function (state) {
   return state.singer
 }
