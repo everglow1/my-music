@@ -7,13 +7,23 @@
     <div class="bg-image" :style="bgStyle">
       <div class="filter"></div>
     </div>
+    <scroll>
+      <song-list></song-list>
+    </scroll>
   </div>
 </template>
 
 <script>
+import Scroll from 'base/scroll/scroll.vue'
+import SongList from 'base/song-list/song-list.vue'
+
 export default {
   // 基础业务组件
   name: 'music-list',
+  components: {
+    Scroll,
+    SongList
+  },
   props: {
     // 图片背景
     bgImage: {

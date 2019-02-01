@@ -1,7 +1,12 @@
 <template>
   <div class="song-list">
     <ul>
-      <li></li>
+      <li v-for="(song, index) in songs" :key="index">
+        <div class="content">
+          <h2 class="name">{{song.name}}</h2>
+          <p class="desc">{{getDesc(song)}}</p>
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -9,13 +14,26 @@
 <script>
 export default {
   // 歌曲列表基础组件
-  name: 'song-list'
+  name: 'song-list',
+  props: {
+    songs: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+  },
+  methods: {
+    getDesc(song) {
+      return `${song.singer} 。 ${song.album}`
+    }
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
-  @import "~common/stylus/variable"
-  @import "~common/stylus/mixin"
+  @import "~common/stylus/variable.styl"
+  @import "~common/stylus/mixin.styl"
 
   .song-list
     .item
