@@ -52,10 +52,7 @@ export default {
         if(res.code === ERR_OK) {
           processSongsUrl(this._normalizeSongs(res.data.list)).then((songs) => {
             this.songs = songs
-            console.log('songs', this.songs)
           })
-          // this.songs = this._normalizeSongs(res.data.list)
-          console.log('songs', this.songs)
         }
       })
     },

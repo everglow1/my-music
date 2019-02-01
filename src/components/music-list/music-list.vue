@@ -4,11 +4,13 @@
       <i class="icon-back"></i>
     </div>
     <h1 class="title" v-html="title"></h1>
-    <div class="bg-image" :style="bgStyle">
+    <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="filter"></div>
     </div>
-    <scroll>
-      <song-list></song-list>
+    <scroll :data="songs" class="list" ref="list">
+      <div class="song-list-wrapper">
+        <song-list :songs="songs"></song-list>
+      </div>
     </scroll>
   </div>
 </template>
@@ -44,12 +46,15 @@ export default {
     }
   },
   created() {
-    console.log('title', this.title)
   },
   computed: {
     bgStyle() {
       return `background-image:url(${this.bgImage})`
     }
+  },
+  mounted() {
+    // 设置歌曲列表的高度等于图片的高度
+    this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
   }
 }
 </script>
@@ -130,6 +135,7 @@ export default {
       height: 100%
       background: $color-background
     .list
+      overflow hidden   // 解决滚动无隐藏
       position: absolute
       top: 0
       bottom: 0
