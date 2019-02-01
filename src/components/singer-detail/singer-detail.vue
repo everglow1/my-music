@@ -1,11 +1,12 @@
 <template>
   <transition name="slide">
-    <div class="singer-detail">
-    </div>
+    <music-list :bgImage="bgImage" :title="title" :songs="songs"></music-list>
   </transition>
 </template>
 
 <script>
+import MusicList from 'components/music-list/music-list.vue'
+
 import { mapGetters } from 'vuex'
 
 import { getSingerDetail } from 'api/singer.js'
@@ -19,13 +20,24 @@ export default {
       songs: []
     }
   },
+  components: {
+    MusicList
+  },
   created() {
     this._getDetail()
   },
   computed: {
+    // 获取state的歌手信息
     ...mapGetters([
       'singer'
-    ])
+    ]),
+    title() {
+      console.log('singername', this.singer.name)
+      return this.singer.name
+    },
+    bgImage() {
+      return this.singer.avatar
+    },
   },
   methods: {
     // 获取歌手详情数据
@@ -64,14 +76,7 @@ export default {
 
 <style lang="stylus" scoped>
   @import "~common/stylus/variable.styl"
-  .singer-detail
-    position: fixed
-    z-index: 100
-    top: 0
-    left: 0
-    right 0
-    bottom 0
-    background $color-background
+  
   .slide-enter-active, .slide-leave-active
     transition: all 0.3s
   .slide-enter, .slide-leave-to
