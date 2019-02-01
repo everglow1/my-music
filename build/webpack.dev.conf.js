@@ -27,6 +27,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     before(app) {
       app.use(bodyParser.urlencoded({extended: true}))
+      const querystring = require('querystring')
 
       // 获取歌单列表的数据
       app.get('/api/getDiscList', (req, res) => {
@@ -41,6 +42,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.json(response.data)  // 将请求的url的数据传到 api/getDiscList 接口里面
         }).catch((err) => {
           console.log(err)
+        })
+      })
+
+      // 获取播放歌曲的url
+      app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
+        const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+        axios.post(url, req.body, {
+          headers: {
+            referer: 'https://y.qq.com/',
+            origin: 'https://y.qq.com',
+            'Content-type': 'application/x-www-form-urlencoded'
+          }
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
         })
       })
     },

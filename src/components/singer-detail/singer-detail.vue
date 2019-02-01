@@ -10,9 +10,15 @@ import { mapGetters } from 'vuex'
 
 import { getSingerDetail } from 'api/singer.js'
 import { ERR_OK } from 'api/config.js'
+import { createSong, Song, processSongsUrl } from 'common/js/song.js'
 
 export default {
   name: 'singer-detail',
+  data() {
+    return {
+      songs: []
+    }
+  },
   created() {
     this._getDetail()
   },
@@ -22,6 +28,7 @@ export default {
     ])
   },
   methods: {
+    // 获取歌手详情数据
     _getDetail() {
       // 在详情页刷新时，返回歌手列表页。
       if(!this.singer.id) {
@@ -31,9 +38,25 @@ export default {
       // 根据歌手id获取歌手详情数据
       getSingerDetail(this.singer.id).then((res) => {
         if(res.code === ERR_OK) {
-          console.log('detail', res.data.list)
+          processSongsUrl(this._normalizeSongs(res.data.list)).then((songs) => {
+            this.songs = songs
+            console.log('songs', this.songs)
+          })
+          // this.songs = this._normalizeSongs(res.data.list)
+          console.log('songs', this.songs)
         }
       })
+    },
+    // 整合歌手详情数据
+    _normalizeSongs(list) {
+      let ret = []
+      list.forEach((item) => {
+        let {musicData} = item   // 对象解构赋值， musicData = item.musicData
+        if(musicData.songid && musicData.albummid) {
+          ret.push(createSong(musicData))
+        }
+      })
+      return ret
     }
   }
 }
