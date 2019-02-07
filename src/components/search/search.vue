@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    我是搜索
+    我说搜索
   </div>
 </template>
 

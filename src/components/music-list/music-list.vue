@@ -7,7 +7,8 @@
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="filter"></div>
     </div>
-    <scroll :data="songs" class="list" ref="list">
+    <div class="bg-layer" ref="layer"></div>
+    <scroll @scroll="scroll" :listen-scroll="listenScroll" :probe-type="probeType" :data="songs" class="list" ref="list">
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
@@ -19,6 +20,7 @@
 import Scroll from 'base/scroll/scroll.vue'
 import SongList from 'base/song-list/song-list.vue'
 
+const RESVLOVE_HEIGHT = 40
 export default {
   // 基础业务组件
   name: 'music-list',
@@ -45,7 +47,14 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      scrollY: 0
+    }
+  },
   created() {
+      this.probeType = 3
+      this.listenScroll = true
   },
   computed: {
     bgStyle() {
@@ -53,8 +62,32 @@ export default {
     }
   },
   mounted() {
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTranslateY = -this.imageHeight + RESVLOVE_HEIGHT  // 最小滚动高度
     // 设置歌曲列表的高度等于图片的高度
-    this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
+    this.$refs.list.$el.style.top = `${this.imageHeight}px`
+  },
+  methods: {
+    scroll(pos) {
+      this.scrollY = pos.y
+    }
+  },
+  watch: {
+    scrollY(newY) {
+      let zIndex = 0
+      let translateY = Math.max(this.minTranslateY, newY)
+      this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
+      this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
+      if(newY < this.minTranslateY) {
+        zIndex = 10
+        this.$refs.bgImage.style.paddingTop = 0
+        this.$refs.bgImage.style.height = `${RESVLOVE_HEIGHT}px`
+      } else {
+        this.$refs.bgImage.style.paddingTop = '70%'
+        this.$refs.bgImage.style.height = 0
+      }
+      this.$refs.bgImage.style.zIndex = zIndex
+    }
   }
 }
 </script>
@@ -135,7 +168,7 @@ export default {
       height: 100%
       background: $color-background
     .list
-      overflow hidden   // 解决滚动无隐藏
+      // overflow hidden   // 解决滚动无隐藏
       position: absolute
       top: 0
       bottom: 0
