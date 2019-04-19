@@ -1,40 +1,66 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import recommend from 'components/recommend/recommend.vue'
-import rank from 'components/rank/rank.vue'
-import singer from 'components/singer/singer.vue'
-import search from 'components/search/search.vue'
-import singerdetail from 'components/singer-detail/singer-detail.vue'
 
 Vue.use(Router)
+
+const Recommend = () => import('components/recommend/recommend')
+const Singer = () => import('components/singer/singer')
+const Rank = () => import('components/rank/rank')
+const Search = () => import('components/search/search')
+const SingerDetail = () => import('components/singer-detail/singer-detail')
+const Disc = () => import('components/disc/disc')
+const TopList = () => import('components/top-list/top-list')
+const UserCenter = () => import('components/user-center/user-center')
 
 export default new Router({
   routes: [
     {
-      path: '/recommend',
-      component: recommend
+      path: '/',
+      redirect: '/recommend'
     },
     {
-      path: '/rank',
-      component: rank
+      path: '/recommend',
+      component: Recommend,
+      children: [
+        {
+          path: ':id',
+          component: Disc
+        }
+      ]
     },
     {
       path: '/singer',
-      component: singer,
+      component: Singer,
       children: [
         {
-          path: ':id',  // 以id为变量，传入不同的id，跳到不同的子路由
-          component: singerdetail
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
+    },
+    {
+      path: '/rank',
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: TopList
         }
       ]
     },
     {
       path: '/search',
-      component: search
+      component: Search,
+      children: [
+        {
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
     },
     {
-      path: '/',
-      redirect: '/recommend'
+      path: '/user',
+      component: UserCenter
     }
   ]
 })

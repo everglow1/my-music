@@ -1,8 +1,6 @@
-/**
- * song类封装， 类的扩展性比对象强， 维护比较容易。
- */
-import { getSongsUrl } from 'api/song'
+import { getLyric, getSongsUrl } from 'api/song'
 import { ERR_OK } from 'api/config'
+import { Base64 } from 'js-base64'
 
 export default class Song {
   constructor({id, mid, singer, name, album, duration, image, url}) {
@@ -13,12 +11,28 @@ export default class Song {
     this.album = album
     this.duration = duration
     this.image = image
-    // this.filename = `C400${this.mid}.m4a`
+    this.filename = `C400${this.mid}.m4a`
     this.url = url
+  }
+
+  getLyric() {
+    if (this.lyric) {
+      return Promise.resolve(this.lyric)
+    }
+
+    return new Promise((resolve, reject) => {
+      getLyric(this.mid).then((res) => {
+        if (res.retcode === ERR_OK) {
+          this.lyric = Base64.decode(res.lyric)
+          resolve(this.lyric)
+        } else {
+          reject('no lyric')
+        }
+      })
+    })
   }
 }
 
-// 创建song的功能方法
 export function createSong(musicData) {
   return new Song({
     id: musicData.songid,
@@ -28,35 +42,34 @@ export function createSong(musicData) {
     album: musicData.albumname,
     duration: musicData.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
-    url:  musicData.url
+    url: musicData.url
   })
 }
 
-// 对歌手名字做处理，使用 ‘/’
 function filterSinger(singer) {
   let ret = []
-  if(!singer) {
+  if (!singer) {
     return ''
   }
-  singer.forEach((item) => {
-    ret.push(item.name)
+  singer.forEach((s) => {
+    ret.push(s.name)
   })
   return ret.join('/')
 }
 
+export function isValidMusic(musicData) {
+  return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)
+}
+
 export function processSongsUrl(songs) {
-  return getSongsUrl(songs).then((res) => {
-    if (res.code === ERR_OK) {
-      let urlMid = res.url_mid
-      if (urlMid && urlMid.code === ERR_OK) {
-      let midUrlInfo = urlMid.data.midurlinfo
-      midUrlInfo.forEach((info, index) => {
-        let song = songs[index]
-        song.url = `http://dl.stream.qqmusic.qq.com/${info.purl}`
-      })
-    }
+  if (!songs.length) {
+    return Promise.resolve(songs)
   }
+  return getSongsUrl(songs).then((midUrlInfo) => {
+    midUrlInfo.forEach((info, index) => {
+      let song = songs[index]
+      song.url = info.purl.indexOf('http') === -1 ? `http://dl.stream.qqmusic.qq.com/${info.purl}` : info.purl
+    })
     return songs
   })
 }

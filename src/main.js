@@ -1,26 +1,40 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill'
+import 'common/js/hack'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'             // 注入vuex 的 store
-import 'common/stylus/index.styl'       // 通过webpack引入编译
-import fastclick from 'fastclick'       // 防止移动端点击300ms的延迟, 可能会拦截点击事件
-import VueLazyLoad from 'vue-lazyload'  // vue官方图片懒加载
-import { commonParam } from './api/config';
+import fastclick from 'fastclick'
+import VueLazyload from 'vue-lazyload'
+import store from './store'
+import { SET_PLAY_HISTORY, SET_FAVORITE_LIST } from './store/mutation-types'
+import { loadPlay, loadFavorite } from 'common/js/cache'
+import { processSongsUrl } from 'common/js/song'
 
-Vue.config.productionTip = false
+import 'common/stylus/index.styl'
 
-Vue.use(VueLazyLoad, {
-  loading: require('common/image/default.jpg')
+/* eslint-disable no-unused-vars */
+// import vConsole from 'vconsole'
+
+fastclick.attach(document.body)
+
+Vue.use(VueLazyload, {
+  loading: require('common/image/default.png')
 })
-fastclick.attach(document.body)       // 防止移动端点击300ms的延迟
+
+const historySongs = loadPlay()
+processSongsUrl(historySongs).then((songs) => {
+  store.commit(SET_PLAY_HISTORY, songs)
+})
+
+const favoriteSongs = loadFavorite()
+processSongsUrl(favoriteSongs).then((songs) => {
+  store.commit(SET_FAVORITE_LIST, songs)
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
+  render: h => h(App)
 })

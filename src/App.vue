@@ -1,31 +1,27 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <m-header></m-header>
     <tab></tab>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
+    <player></player>
   </div>
 </template>
 
-<script>
-import VHeader from 'components/v-header/v-header.vue'
-import Tab from 'components/tab/tab.vue'
+<script type="text/ecmascript-6">
+  import MHeader from 'components/m-header/m-header'
+  import Player from 'components/player/player'
+  import Tab from 'components/tab/tab'
 
-export default {
-  name: 'App',
-  data() {
-    return {
-
+  export default {
+    components: {
+      MHeader,
+      Tab,
+      Player
     }
-  },
-  components: {
-    VHeader,
-    Tab
   }
-}
 </script>
 
-<style lang="stylus">
-
+<style scoped lang="stylus" rel="stylesheet/stylus">
 </style>

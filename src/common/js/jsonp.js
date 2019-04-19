@@ -1,13 +1,11 @@
-/**
- * jsonp封装 jsonp(url, opts, fn)
- */
-import originJsonp from 'jsonp'    // 引入jsonp插件
+import originJsonp from 'jsonp'
 
 export default function jsonp(url, data, option) {
-  url = url + (url.indexOf('?') < 0 ? '?' : '&' ) + param(data)
-  return new Promise ((resolve, reject) =>{
-    originJsonp(url, option,(err, data) => {  // err, data 为jsonp回掉函数传的参数， err为空即为成功
-      if(!err) {
+  url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
+
+  return new Promise((resolve, reject) => {
+    originJsonp(url, option, (err, data) => {
+      if (!err) {
         resolve(data)
       } else {
         reject(err)
@@ -16,12 +14,11 @@ export default function jsonp(url, data, option) {
   })
 }
 
-// 转化json对象为url格式
-function param(data) {
-  let url = '';
-  for(let k in data) {
-    let value = data[k] !== undefined ? data[k] : '';
-    url = url + `&${k}=${encodeURIComponent(value)}`;     // 拼接url
+export function param(data) {
+  let url = ''
+  for (var k in data) {
+    let value = data[k] !== undefined ? data[k] : ''
+    url += '&' + k + '=' + encodeURIComponent(value)
   }
-  return url ? url.substring(1) : '';
+  return url ? url.substring(1) : ''
 }

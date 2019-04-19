@@ -1,13 +1,13 @@
 <template>
-  <div class="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="songLists">
+  <div class="recommend" ref="recommend">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
         <div v-if="recommends.length" class="slider-wrapper">
           <div class="slider-content">
-            <slider>
-              <div v-for="(item, index) in recommends" :key="index">
+            <slider ref="slider">
+              <div v-for="item in recommends">
                 <a :href="item.linkUrl">
-                  <img :src="item.picUrl" />
+                  <img @load="loadImage" :src="item.picUrl">
                 </a>
               </div>
             </slider>
@@ -16,93 +16,108 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item, index) in songLists" :key="index" class="item">
+            <li @click="selectItem(item)" v-for="item in discList" class="item">
               <div class="icon">
-                <img class="needsclick" @load="loadImage" width="60" height="60" v-lazy="item.imgurl" />
+                <img width="60" height="60" v-lazy="item.imgurl">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
                 <p class="desc" v-html="item.dissname"></p>
               </div>
-            </li> 
+            </li>
           </ul>
         </div>
       </div>
-      <div class="loading" v-show="!songLists.length">
+      <div class="loading-container" v-show="!discList.length">
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
-<script>
-/**
- * better-scroll 计算dom容器的高度，判断需要滚动多长的距离，所以要确保dom都渲染完之后，初始化，或者调用refresh。
- * 数据改变能影响dom，要调用refresh
- */
-import BScroll from 'better-scroll'
+<script type="text/ecmascript-6">
+  import Slider from 'base/slider/slider'
+  import Loading from 'base/loading/loading'
+  import Scroll from 'base/scroll/scroll'
+  import {getRecommend, getDiscList} from 'api/recommend'
+  import {playlistMixin} from 'common/js/mixin'
+  import {ERR_OK} from 'api/config'
+  import {mapMutations} from 'vuex'
 
-import {getRecommend, getSongList} from 'api/recommend.js'
-import {ERR_OK} from 'api/config.js'
-
-import Slider from 'base/slider/slider.vue'
-import Scroll from 'base/scroll/scroll.vue'
-import Loading from '../../base/loading/load.vue'
-
-export default {
-  name: 'recommend',
-  data() {
-    return {
-      recommends: [],
-      songLists: []
-    }
-  },
-  components: {
-    Slider,
-    Scroll,
-    Loading
-  },
-  created() {
-    this. _getRecommend()
-    this._getSongList()
-  },
-  methods: {
-    _getRecommend() {
-      getRecommend().then((res) => {
-        if(res.code === ERR_OK) {
-          this.recommends = res && res.data && res.data.slider || []
-        }
-      })
-    },
-    _getSongList() {
-      getSongList().then((res) => {
-        if(res.code === ERR_OK) {
-          this.songLists = res && res.data && res.data.list || []
-        }
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
-    // 监听图片的onload事件
-    loadImage() {
-      // 设置标志位。确保该逻辑只执行一次
-      if(!this.checLoaded) {
-        this.$refs.scroll.refresh()
-        this.checLoaded = true
+  export default {
+    mixins: [playlistMixin],
+    data() {
+      return {
+        recommends: [],
+        discList: []
       }
+    },
+    created() {
+      this._getRecommend()
+
+      this._getDiscList()
+    },
+    activated() {
+      setTimeout(() => {
+        this.$refs.slider && this.$refs.slider.refresh()
+      }, 20)
+    },
+    methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
+      },
+      loadImage() {
+        if (!this.checkloaded) {
+          this.checkloaded = true
+          setTimeout(() => {
+            this.$refs.scroll.refresh()
+          }, 20)
+        }
+      },
+      selectItem(item) {
+        this.$router.push({
+          path: `/recommend/${item.dissid}`
+        })
+        this.setDisc(item)
+      },
+      _getRecommend() {
+        getRecommend().then((res) => {
+          if (res.code === ERR_OK) {
+            this.recommends = res.data.slider
+          }
+        })
+      },
+      _getDiscList() {
+        getDiscList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
+          }
+        })
+      },
+      ...mapMutations({
+        setDisc: 'SET_DISC'
+      })
+    },
+    components: {
+      Slider,
+      Loading,
+      Scroll
     }
   }
-}
 </script>
 
-<style lang="stylus" scoped>
-  @import "../../common/stylus/variable.styl"
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
 
   .recommend
-    position fixed
-    width 100%
-    top 88px
-    bottom 0
+    position: fixed
+    width: 100%
+    top: 88px
+    bottom: 0
     .recommend-content
       height: 100%
       overflow: hidden
@@ -147,9 +162,9 @@ export default {
               color: $color-text
             .desc
               color: $color-text-d
-      .loading
-        position absolute
-        width 100%
-        top 50%
-        transform translateY(-50%)  
+      .loading-container
+        position: absolute
+        width: 100%
+        top: 50%
+        transform: translateY(-50%)
 </style>

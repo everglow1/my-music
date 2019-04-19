@@ -1,18 +1,14 @@
-/**
- * 1.配置url通用参数
- * 2.一些常用的参数
- */
-
-export let commonParam = {
-  g_tk: 2085775625,
-  notice: 0,
+export const commonParams = {
+  g_tk: 1928093487,
   inCharset: 'utf-8',
   outCharset: 'utf-8',
-  format: 'json'
+  notice: 0,
+  format: 'jsonp'
 }
 
-export let options = {
-  param: 'jsonpCallback'
+export const options = {
+  param: 'jsonpCallback',
+  prefix: 'jp'
 }
 
 export const ERR_OK = 0
