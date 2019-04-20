@@ -128,8 +128,7 @@
       transform: translate3d(100%, 0, 0)
     .back
       position absolute
-      top: 0
-      left: 6px
+      top: 5px
       z-index: 50
       .icon-back
         display: block
