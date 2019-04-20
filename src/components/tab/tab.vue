@@ -27,6 +27,7 @@
     height: 44px
     line-height: 44px
     font-size: $font-size-medium
+    // background-color: #B72712;
     .tab-item
       flex: 1
       text-align: center
@@ -35,6 +36,6 @@
         color: $color-text-l
       &.router-link-active
         .tab-link
-          color: $color-theme
-          border-bottom: 2px solid $color-theme
+          color: $color-text-t
+          border-bottom: 2px solid $color-text-t
 </style>

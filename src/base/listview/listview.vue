@@ -183,7 +183,7 @@
         line-height: 30px
         padding-left: 20px
         font-size: $font-size-small
-        color: $color-text-l
+        color: $color-text-ll
         background: $color-highlight-background
       .list-group-item
         display: flex
@@ -215,7 +215,7 @@
         color: $color-text-l
         font-size: $font-size-small
         &.current
-          color: $color-theme
+          color: $color-sub-theme
     .list-fixed
       position: absolute
       top: 0
@@ -226,7 +226,7 @@
         line-height: 30px
         padding-left: 20px
         font-size: $font-size-small
-        color: $color-text-l
+        color: $color-text-ll
         background: $color-highlight-background
     .loading-container
       position: absolute

@@ -50,22 +50,23 @@
     width: 100%
     padding: 0 6px
     height: 40px
-    background: $color-highlight-background
-    border-radius: 6px
+    background: $color-background
+    border-radius: 20px
+    border: 1px solid $color-theme
     .icon-search
       font-size: 24px
-      color: $color-background
+      color: $color-icon-background
     .box
       flex: 1
       margin: 0 5px
       line-height: 18px
-      background: $color-highlight-background
-      color: $color-text
+      background: $color-background
+      color: $color-text-l
       font-size: $font-size-medium
       outline: 0
       &::placeholder
         color: $color-text-d
     .icon-dismiss
       font-size: 16px
-      color: $color-background
+      color: $color-dialog-background
 </style>

@@ -129,9 +129,9 @@
             padding: 5px 10px
             margin: 0 20px 10px 0
             border-radius: 6px
-            background: $color-highlight-background
+            background: $color-dialog-background
             font-size: $font-size-medium
-            color: $color-text-d
+            color: $color-text-ll
         .search-history
           position: relative
           margin: 0 20px
