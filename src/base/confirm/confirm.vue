@@ -78,13 +78,13 @@
       .confirm-content
         width: 270px
         border-radius: 13px
-        background: $color-highlight-background
+        background: $color-theme
         .text
           padding: 19px 15px
           line-height: 22px
           text-align: center
           font-size: $font-size-large
-          color: $color-text-l
+          color: $color-text-b
         .operate
           display: flex
           align-items: center
@@ -95,7 +95,7 @@
             line-height: 22px
             padding: 10px 0
             border-top: 1px solid $color-background-d
-            color: $color-text-d
+            color: $color-text-b
             &.left
               border-right: 1px solid $color-background-d
 

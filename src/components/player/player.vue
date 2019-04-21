@@ -535,7 +535,7 @@
       top: 0
       bottom: 0
       z-index: 150
-      background: $color-background
+      background: $color-background-blur
       .background
         position: absolute
         left: 0
@@ -544,7 +544,7 @@
         height: 100%
         z-index: -1
         opacity: 0.6
-        filter: blur(20px)
+        filter: blur(10px)
       .top
         position: relative
         margin-bottom: 25px
@@ -557,7 +557,7 @@
             display: block
             padding: 9px
             font-size: $font-size-large-x
-            color: $color-theme
+            color: $color-text-b
             transform: rotate(-90deg)
         .title
           width: 70%
@@ -566,12 +566,12 @@
           text-align: center
           no-wrap()
           font-size: $font-size-large
-          color: $color-text
+          color: $color-text-b
         .subtitle
           line-height: 20px
           text-align: center
-          font-size: $font-size-medium
-          color: $color-text
+          font-size: $font-size-small
+          color: $color-text-b
       .middle
         position: fixed
         width: 100%
@@ -617,7 +617,7 @@
               height: 20px
               line-height: 20px
               font-size: $font-size-medium
-              color: $color-text-l
+              color: $color-text-b
         .middle-r
           display: inline-block
           vertical-align: top
@@ -631,10 +631,10 @@
             text-align: center
             .text
               line-height: 32px
-              color: $color-text-l
+              color: $color-text-i
               font-size: $font-size-medium
               &.current
-                color: $color-text
+                color: $color-text-b
             .pure-music
               padding-top: 50%
               line-height: 32px
@@ -656,7 +656,7 @@
             border-radius: 50%
             background: $color-text-l
             &.active
-              width: 20px
+              width: 8px
               border-radius: 5px
               background: $color-text-ll
         .progress-wrapper
@@ -666,7 +666,7 @@
           margin: 0px auto
           padding: 10px 0
           .time
-            color: $color-text
+            color: $color-text-b
             font-size: $font-size-small
             flex: 0 0 30px
             line-height: 30px
@@ -682,7 +682,7 @@
           align-items: center
           .icon
             flex: 1
-            color: $color-theme
+            color: $color-text-b
             &.disable
               color: $color-theme-d
             i
@@ -747,18 +747,18 @@
           margin-bottom: 2px
           no-wrap()
           font-size: $font-size-medium
-          color: $color-text
+          color: $color-text-b
         .desc
           no-wrap()
           font-size: $font-size-small
-          color: $color-text-d
+          color: $color-text-b
       .control
         flex: 0 0 30px
         width: 30px
         padding: 0 10px
         .icon-play-mini, .icon-pause-mini, .icon-playlist
           font-size: 30px
-          color: $color-theme-d
+          color: $color-border-background
         .icon-mini
           font-size: 32px
           position: absolute

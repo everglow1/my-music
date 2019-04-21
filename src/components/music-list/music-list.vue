@@ -164,7 +164,7 @@
         display: block
         padding: 10px
         font-size: $font-size-large-x
-        color: $color-theme
+        color: $color-background
     .title
       position: absolute
       top: 0
@@ -175,7 +175,7 @@
       text-align: center
       line-height: 40px
       font-size: $font-size-large
-      color: $color-text
+      color: $color-text-b
     .bg-image
       position: relative
       width: 100%
@@ -194,8 +194,8 @@
           padding: 7px 0
           margin: 0 auto
           text-align: center
-          border: 1px solid $color-theme
-          color: $color-theme
+          border: 1px solid $color-background
+          color: $color-background
           border-radius: 100px
           font-size: 0
           .icon-play
