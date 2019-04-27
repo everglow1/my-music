@@ -32,6 +32,7 @@
       this._getSongList()
     },
     methods: {
+      // 获取热门歌单内歌曲数据
       _getSongList() {
         if (!this.disc.dissid) {
           this.$router.push('/recommend')

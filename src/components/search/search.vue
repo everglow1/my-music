@@ -73,6 +73,7 @@
       showConfirm() {
         this.$refs.confirm.show()
       },
+      // 获取热词数据
       _getHotKey() {
         getHotKey().then((res) => {
           if (res.code === ERR_OK) {

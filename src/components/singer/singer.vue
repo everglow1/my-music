@@ -38,6 +38,7 @@
         })
         this.setSinger(singer)
       },
+      // 获取歌手信息
       _getSingerList() {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
@@ -45,6 +46,7 @@
           }
         })
       },
+      // 歌手信息处理
       _normalizeSinger(list) {
         let map = {
           hot: {

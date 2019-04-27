@@ -41,10 +41,12 @@
           this.$router.push('/rank')
           return
         }
+        // 获取音乐列表数据
         getMusicList(this.topList.id).then((res) => {
           if (res.code === ERR_OK) {
             processSongsUrl(this._normalizeSongs(res.songlist)).then((songs) => {
               this.songs = songs
+              console.log('getMusicList', this.songs)
             })
           }
         })
