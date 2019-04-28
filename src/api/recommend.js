@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const debug = process.env.NODE_ENV !== 'production'
 
-// 获取轮播图数据
+// 1.获取轮播图数据
 export function getRecommend() {
   const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
 
@@ -17,7 +17,7 @@ export function getRecommend() {
   return jsonp(url, data, options)
 }
 
-// 获取推荐热门歌单数据
+// 2.获取推荐热门歌单数据
 export function getDiscList() {
   const url = debug ? '/api/getDiscList' : 'http://ustbhuangyi.com/music/api/getDiscList'
 
